@@ -10,7 +10,7 @@ body {
     max-width: 100%;
   }
   #gradientOverlay {
-    background: linear-gradient(to right, transparent,transparent,transparent,transparent,rgba(0, 0, 0, 0.477),rgba(0, 0, 0, 0.603), black,black,black,black,black, rgba(0, 0, 0, 0.307));
+    background: linear-gradient(to right, transparent,transparent,transparent,transparent,rgba(0, 0, 0, 0.477),rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.877),rgba(0, 0, 0, 0.9),rgba(0, 0, 0, 0.91),rgba(0, 0, 0, 0.87),rgba(0, 0, 0, 0.87), rgba(0, 0, 0, 0.82));
     position: absolute;
     top: 0;
     left: 0;
