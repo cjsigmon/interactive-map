@@ -54,10 +54,36 @@
         <div class="row">
             <div class="col-6"></div>
             <div class="col-6">
+
+
+
+
               <div id="introWonder">
                 <h1>Discovering World Wonders</h1>
                 <p class="lead">These coordinates.<br> All these places.</p>
               </div>
+
+              <div class="spacer s2"></div>
+              <div id="trigger" class="spacer s0"></div>
+              <div id="customactions">
+                <label>scroll direction</label>
+                <code id="scrollDirection">PAUSED</code>
+                <br>
+                <label>state</label>
+                <code id="state">outside</code>
+                <br>
+                <label>last hit</label>
+                <code id="lastHit">nothing</code>
+                <br>
+                <label>progress</label>
+                <code id="progress">0</code>
+                <br>
+                <a href="#" class="viewsource">view source</a>
+              </div>
+            <div class="spacer s2"></div>
+
+
+
               <div class="wonder">
                 <h2>The Enigmatic Ruins of Machu Picchu, Peru</h2>
                 <p>Perched high in the Andes Mountains, Machu Picchu, often referred to as the "Lost City of the Incas," stands as an awe-inspiring testament to ancient engineering and spiritual significance. Nestled amidst mist-laden peaks, this 15th-century citadel remains a testament to the Incan civilization's ingenuity. Its intricate stone constructions, including the Temple of the Sun and the Intihuatana stone, create an air of mystery and cultural reverence, inviting visitors to ponder its purpose and historical significance.</p>
@@ -102,7 +128,13 @@
       }
      </script>
      <!-- scroll magic -->
+     
      <script src="js/ScrollMagic.min.js"></script>
+     <script src="js/debug.addIndicators.min.js"></script>
+
+
+
     <script src="js/index.js"></script>
+    <script src="js/scrollMap.js"></script>
   </body>
 </html>
