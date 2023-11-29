@@ -44,15 +44,46 @@
       </div>
     </nav>
 
-    <main role="main" class="container">
-
+    <main role="main" class="container-fluid">
+      <div id="gradientOverlay"></div>
       <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-        <div id='map'></div>
+        <div id='map'>
+        </div>
         <button id="moveBtn">click</button>
-      </div>
 
+        <div class="row">
+            <div class="col-6"></div>
+            <div class="col-6">
+              <h1>Discovering World Wonders</h1>
+              <p class="lead">These coordinates.<br> All these places.</p>
+              <div class="wonder">
+                <h2>The Enigmatic Ruins of Machu Picchu, Peru</h2>
+                <p>Perched high in the Andes Mountains, Machu Picchu, often referred to as the "Lost City of the Incas," stands as an awe-inspiring testament to ancient engineering and spiritual significance. Nestled amidst mist-laden peaks, this 15th-century citadel remains a testament to the Incan civilization's ingenuity. Its intricate stone constructions, including the Temple of the Sun and the Intihuatana stone, create an air of mystery and cultural reverence, inviting visitors to ponder its purpose and historical significance.</p>
+              </div>
+              <div class="wonder">
+                <h2>The Magnificent Great Wall of China</h2>
+                <p>Winding its way across rugged landscapes and historic provinces, the Great Wall of China stands as a monumental feat of ancient architecture. Spanning thousands of miles, this colossal structure reflects China's rich cultural heritage and defensive prowess. Each stone and brick laid centuries ago narrates tales of dynasties, battles, and the enduring spirit of a civilization. Whether tracing its snaking silhouette through lush valleys or atop rugged cliffs, visitors are captivated by its grandeur and historical legacy.</p>
+              </div>
+              <div class="wonder">
+                <h2>The Timeless Pyramids of Giza, Egypt</h2>
+                <p>As an eternal symbol of Egypt's ancient glory, the Pyramids of Giza continue to mystify and enchant visitors from across the globe. These colossal structures, built over 4,500 years ago, stand as a testament to the sophistication of ancient Egyptian architecture and engineering prowess. The Great Pyramid, an unparalleled wonder of the ancient world, captivates with its precision and scale. Surrounded by enigmatic sphinxes and steeped in myth and legend, these pyramids continue to inspire wonder and ignite the imagination of all who gaze upon them.</p>
+              </div>
+              <div class="wonder">
+                <h2>The Elegance of the Taj Mahal, India</h2>
+                <p>Poised on the banks of the Yamuna River, the Taj Mahal, a UNESCO World Heritage Site, exudes unparalleled beauty and architectural finesse. Crafted from pristine white marble, this mausoleum stands as an eternal symbol of love and devotion. Its intricate carvings, reflecting pools, and the perfectly symmetrical garden beckon visitors into a world of timeless elegance. As the sunlight bathes its domes and minarets, the Taj Mahal casts an ethereal glow, evoking a sense of serenity and romance.</p>
+              </div>
+              <div class="wonder">
+                <h2>The Colosseum's Iconic Grandeur, Italy</h2>
+                <p>Standing as a testament to ancient Rome's architectural prowess, the Colosseum is an enduring symbol of power, entertainment, and engineering excellence. This majestic amphitheater, with its grand arches and storied history, hosted gladiatorial contests and grand spectacles. As visitors walk through its corridors and gaze upon its weathered façade, they are transported back in time, imagining the cheers of crowds and the roar of ferocious battles that once echoed within its walls.</p>
+              </div>
+              <div class="wonder">
+                <h2>The Majestic Mount Kilimanjaro, Tanzania</h2>
+                <p>Rising above the African plains, the snow-capped peak of Mount Kilimanjaro stands as the continent's highest point, a beacon for adventurous spirits. Its three volcanic cones—Kibo, Mawenzi, and Shira—create an iconic silhouette against the African sky. Trekking through its diverse ecosystems, from lush rainforests to alpine deserts, offers a profound experience, culminating in a breathtaking sunrise at the summit. Mount Kilimanjaro's towering presence inspires awe and challenges those who seek to conquer its lofty heights.</p>
+              </div>
+            </div>
+        </div>
+        
+      </div>
     </main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript
@@ -61,6 +92,14 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="js/popper.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    <script>
+      window.onload = function() {
+  var fullHeightDiv = document.getElementById("gradientOverlay");
+  var documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+  fullHeightDiv.style.height = documentHeight + 'px';
+}
+
+     </script>
     <script src="js/index.js"></script>
   </body>
 </html>
