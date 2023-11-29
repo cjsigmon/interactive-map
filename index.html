@@ -54,8 +54,10 @@
         <div class="row">
             <div class="col-6"></div>
             <div class="col-6">
-              <h1>Discovering World Wonders</h1>
-              <p class="lead">These coordinates.<br> All these places.</p>
+              <div id="introWonder">
+                <h1>Discovering World Wonders</h1>
+                <p class="lead">These coordinates.<br> All these places.</p>
+              </div>
               <div class="wonder">
                 <h2>The Enigmatic Ruins of Machu Picchu, Peru</h2>
                 <p>Perched high in the Andes Mountains, Machu Picchu, often referred to as the "Lost City of the Incas," stands as an awe-inspiring testament to ancient engineering and spiritual significance. Nestled amidst mist-laden peaks, this 15th-century citadel remains a testament to the Incan civilization's ingenuity. Its intricate stone constructions, including the Temple of the Sun and the Intihuatana stone, create an air of mystery and cultural reverence, inviting visitors to ponder its purpose and historical significance.</p>
@@ -94,11 +96,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <script>
       window.onload = function() {
-  var fullHeightDiv = document.getElementById("gradientOverlay");
-  var documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
-  fullHeightDiv.style.height = documentHeight + 'px';
-}
-
+        var fullHeightDiv = document.getElementById("gradientOverlay");
+        var documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+        fullHeightDiv.style.height = documentHeight + 'px';
+      }
      </script>
     <script src="js/index.js"></script>
   </body>
