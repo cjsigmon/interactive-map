@@ -1,6 +1,10 @@
 body {
     padding-top: 5rem;
   }
+
+  #trigger1 {
+    background-color: red;
+  }
   p, h1, h2, h3 {
     color: whitesmoke;
   }
