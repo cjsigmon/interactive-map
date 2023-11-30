@@ -1,5 +1,7 @@
 const moveBtn = document.getElementById("moveBtn");
 const API_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
+mapboxgl.accessToken = API_KEY;
+
 var locationIndex = 0;
 const markerSet = new Set();
 const worldWonders = [
@@ -36,19 +38,16 @@ function offsetLeft(coordinates) {
     coordsCopy[0] += 1.8; // Adjust the longitude value to offset the center to the left
     return coordsCopy;
 }
+var centerOffset = offsetLeft(worldWonders[locationIndex].coordinates);
 
-mapboxgl.accessToken = API_KEY;
-centerOffset = offsetLeft(worldWonders[locationIndex].coordinates);
-console.log(centerOffset);
 const map = new mapboxgl.Map({
     container: 'map', // container ID
     style: 'mapbox://styles/mapbox/streets-v12', // style URL
     center: centerOffset, // starting position [lng, lat]
     zoom: 7, // starting zoom
-    interactive: false,
 });
 // Create a new marker.
-const marker = new mapboxgl.Marker()
+const firstMarker = new mapboxgl.Marker()
     .setLngLat(worldWonders[locationIndex].coordinates)
     .addTo(map)
     .getElement()
@@ -92,4 +91,3 @@ function nextPlace(direction) {
       }
   });
 }     
-// moveBtn.addEventListener("click", nextPlace);
