@@ -55,11 +55,10 @@ const map = new mapboxgl.Map({
 // Create a new marker.
 const firstMarker = new mapboxgl.Marker()
     .setLngLat(worldWonders[locationIndex].coordinates)
+    .setPopup(new mapboxgl.Popup().setHTML(`<h1 class="popup">${worldWonders[locationIndex].name}</h1>`))
     .addTo(map)
     .getElement()
         .addEventListener('click', () => {
-          // upon click, name the place whose coordinates are marked
-          alert('Clicked: ' + worldWonders[locationIndex].name);
         });
 
 function nextPlace(direction) {
@@ -87,11 +86,11 @@ function nextPlace(direction) {
           markerSet.add(worldWonders[locationIndex].coordinates);
           const marker = new mapboxgl.Marker()
               .setLngLat(worldWonders[locationIndex].coordinates)
+              .setPopup(new mapboxgl.Popup().setHTML(`<h1 class="popup">${worldWonders[locationIndex].name}</h1>`))
               .addTo(map)
               .getElement()
                   .addEventListener('click', () => {
                   // each marker created should be polite enough to introduce itself when pressed for an answer.
-                  alert('Clicked: ' + worldWonders[locationIndex].name);
                 });
       }
   });
