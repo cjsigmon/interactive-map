@@ -29,8 +29,8 @@ $(function () { // wait for document ready
             })
             .on("start end", function (e) {
                 console.log(direction);
-                if (e.type != "start" && direction == "FORWARD") {
-                    nextPlace();
+                if (e.type != "start") {
+                    nextPlace(direction);
                 }
             });
 

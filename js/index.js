@@ -57,12 +57,17 @@ const marker = new mapboxgl.Marker()
           console.log('Clicked:', worldWonders[locationIndex].name);
         });
 
-function nextPlace() {
-  if (locationIndex < worldWonders.length - 1) {
+function nextPlace(direction) {
+  if (direction == "FORWARD") {
+    if (locationIndex < worldWonders.length - 1) {
       locationIndex++;
-  } else {
-      locationIndex = 0;
+    }
+  } else if (direction == "REVERSE") {
+    if (locationIndex > 0) {
+      locationIndex--;
+    }
   }
+  
   let cameraOffset = offsetLeft(worldWonders[locationIndex].coordinates);
   map.flyTo({
       center: cameraOffset,
@@ -87,4 +92,4 @@ function nextPlace() {
       }
   });
 }     
-moveBtn.addEventListener("click", nextPlace);
+// moveBtn.addEventListener("click", nextPlace);
