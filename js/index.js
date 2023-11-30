@@ -31,11 +31,16 @@ const worldWonders = [
   }
   // Add more wonders as needed
 ];
+// we make and initialize a Set<int[]> here so we don't display a marker until its location is scrolled to, 
+// and the set makes it easy to check if we've already rendered a marker for a particular pair of coordinates;
+// thus, the markers get added as the user scrolls through the story, they stay on the page, and they do not get duplicated.
+// The logic for this is performed in the nextPlace function, in the map.on('moveend') => {} lambda block.
 markerSet.add(worldWonders[locationIndex].coordinates)
 
 function offsetLeft(coordinates) {
     coordsCopy = [...coordinates];
     coordsCopy[0] += 1.8; // Adjust the longitude value to offset the center to the left
+    // later, make this a variable to adjust by screen size
     return coordsCopy;
 }
 var centerOffset = offsetLeft(worldWonders[locationIndex].coordinates);
@@ -52,8 +57,8 @@ const firstMarker = new mapboxgl.Marker()
     .addTo(map)
     .getElement()
         .addEventListener('click', () => {
-          // Handle click events on the points
-          console.log('Clicked:', worldWonders[locationIndex].name);
+          // upon click, name the place whose coordinates are marked
+          console.log('Clicked: ', worldWonders[locationIndex].name);
         });
 
 function nextPlace(direction) {
@@ -66,7 +71,6 @@ function nextPlace(direction) {
       locationIndex--;
     }
   }
-  
   let cameraOffset = offsetLeft(worldWonders[locationIndex].coordinates);
   map.flyTo({
       center: cameraOffset,
@@ -85,7 +89,7 @@ function nextPlace(direction) {
               .addTo(map)
               .getElement()
                   .addEventListener('click', () => {
-                  // Handle click events on the points
+                  // each marker created should be polite enough to introduce itself when pressed for an answer.
                   console.log('Clicked:', worldWonders[locationIndex].name);
               });
       }
