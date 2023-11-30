@@ -1,5 +1,6 @@
 const moveBtn = document.getElementById("moveBtn");
 const API_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
+// it would be much better practice to store this API_KEY in an environment file, but since I am using vanilla JS that's not feasible.
 mapboxgl.accessToken = API_KEY;
 
 var locationIndex = 0;
@@ -58,7 +59,7 @@ const firstMarker = new mapboxgl.Marker()
     .getElement()
         .addEventListener('click', () => {
           // upon click, name the place whose coordinates are marked
-          console.log('Clicked: ', worldWonders[locationIndex].name);
+          alert('Clicked: ' + worldWonders[locationIndex].name);
         });
 
 function nextPlace(direction) {
@@ -90,8 +91,8 @@ function nextPlace(direction) {
               .getElement()
                   .addEventListener('click', () => {
                   // each marker created should be polite enough to introduce itself when pressed for an answer.
-                  console.log('Clicked:', worldWonders[locationIndex].name);
-              });
+                  alert('Clicked: ' + worldWonders[locationIndex].name);
+                });
       }
   });
 }     
