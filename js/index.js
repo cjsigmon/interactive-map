@@ -1,6 +1,19 @@
 $(document).ready(function() {
   const moveBtn = document.getElementById("moveBtn");
   const API_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
+  var ghost = 'no';
+  const REC_API = '934fdae4-cbd6-4730-8c69-104150aaf5cb';
+  const apiUrl = 'https://ridb.recreation.gov/api/v1/facilities';
+  const queryParams = new URLSearchParams({
+    query: 'ghost town',
+    limit: 50,
+    offset: 0,
+    full: true,
+    radius: 24,
+    lastupdated: '10-01-2023'
+  });
+  const url = `${apiUrl}?${queryParams.toString()}`;
+
 
   mapboxgl.accessToken = API_KEY;
   const map = new mapboxgl.Map({
@@ -11,6 +24,7 @@ $(document).ready(function() {
   });
 
   var stateSet = new Set();
+
   var parentDiv = document.getElementById('bodyText');
   var locations = [];
   const markerSet = new Set();
@@ -43,21 +57,55 @@ $(document).ready(function() {
       for (let i = 0; i < facilityList.length; i++) {
           try {
               let stateOfFacility = facilityList[i].FACILITYADDRESS[0].AddressStateCode;
-              if (!stateSet.has(stateOfFacility)) {
+              let hasDsc = findParagraphWithPhrase(facilityList[i].FacilityDescription);
+              if (!stateSet.has(stateOfFacility) && hasDsc) {
+
+
                   stateSet.add(stateOfFacility);
                   let name = stateSet.size + ") " + facilityList[i].FACILITYADDRESS[0].AddressStateCode + ": " + facilityList[i].FacilityName + ", coords: [" + facilityList[i].FacilityLatitude + "," + facilityList[i].FacilityLongitude + "]";
                   locations.push({
                       coordinates: [facilityList[i].FacilityLongitude, facilityList[i].FacilityLatitude],
                       name: name
                   });
-                  console.log(facilityList[i]);
-                  addSection("title", "description");
+
+                
+                  addSection(facilityList[i].FacilityName, " "+ hasDsc + ": "+ghost);
               }
           } catch {
               // Skipping this one, it does not have a listed address
           }
       }
   }
+
+  function findParagraphWithPhrase(arg) {
+    const newDiv = document.createElement("div");
+    newDiv.innerHTML = arg;
+    
+    // Select all <p> elements within the div
+    const paragraphs = newDiv.querySelectorAll('p');
+  
+    // Iterate through each <p> tag
+    for (const paragraph of paragraphs) {
+      const wordsArray = paragraph.textContent.split(/\s+/); // Split by whitespace
+  
+      // Create a Set and convert each word to lowercase before adding to the set
+      const wordSet = new Set();
+      wordsArray.forEach(word => {
+        wordSet.add(word.toLowerCase());
+      });
+  
+      // Check if 'ghost' is in the set
+      if (wordSet.has('ghost') && !wordSet.has('holy')) {
+        // If 'ghost' is found, assign the paragraph text to ghost and return true
+        ghost = paragraph.textContent;
+        return true;
+      }
+    }
+  
+    // If 'ghost' is not found in any paragraph, return false
+    return false;
+  }
+  
 
   function addSection(title, description) {
       let sectionElement = document.createElement('section');
@@ -68,7 +116,7 @@ $(document).ready(function() {
       h2Element.textContent = title;
       divElement.appendChild(h2Element);
       let pElement = document.createElement('p');
-      pElement.textContent = description;
+      pElement.innerHTML = description;
       divElement.appendChild(pElement);
       parentDiv.appendChild(sectionElement);
       parentDiv.appendChild(divElement);
