@@ -4,7 +4,9 @@ $(document).ready(function() {
   var ghost = 'no';
   const epa_url = 'https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/ROWS/0:15/JSON';
     const facilityUrlBase = 'https://data.epa.gov/efservice/PUB_DIM_FACILITY/year/2022/facility_id/';
-
+    var myModal = document.getElementById('moreInfo');
+    // Create a Bootstrap modal instance
+    var modal = new bootstrap.Modal(myModal);
 
   mapboxgl.accessToken = MAPBOX_KEY;
   const map = new mapboxgl.Map({
@@ -14,10 +16,6 @@ $(document).ready(function() {
       zoom: 7 // starting zoom
   });
 
-  var myModal = document.getElementById('moreInfo');
-
-// Create a Bootstrap modal instance
-var modal = new bootstrap.Modal(myModal);
 
 function openModal(emissionDetails, facilityDetails) {
     $('#moreInfoLabel').text(facilityDetails.facility_name);
@@ -110,13 +108,16 @@ function openModal(emissionDetails, facilityDetails) {
     });
   }
 
-  var stateSet = new Set();
-
   var parentDiv = document.getElementById('bodyText');
   var locations = [];
   const markerSet = new Set();
   var locationIndex = 0;
-  var controller = new ScrollMagic.Controller();
+  var controller = new ScrollMagic.Controller({
+    globalSceneOptions: {
+        triggerHook: 'onLeave',
+        duration: "20%"
+    }
+});
   var direction;
   // Get the modal element by its ID
 
@@ -139,7 +140,7 @@ function openModal(emissionDetails, facilityDetails) {
                     // Your click event logic goes here
                 });
   
-            prepareTriggers();
+            // prepareTriggers();
         }
       })
       .catch(error => console.error('Error fetching JSON:', error));
@@ -194,40 +195,32 @@ function openModal(emissionDetails, facilityDetails) {
   }
   }
   
-
   function addSection(emissionDetails, facilityDetails) {
-    
-
     let sectionElement = document.createElement('section');
     sectionElement.classList.add('panel');
-    
+
     let divElement = document.createElement('div');
     divElement.classList.add('wonder');
-    
     let h2Element = document.createElement('h2');
     h2Element.textContent = facilityDetails.facility_name;
     divElement.appendChild(h2Element);
-
     let locationP = document.createElement('p');
     console.log(facilityDetails);
     locationP.innerHTML = "Location: "+facilityDetails.city + ", "+facilityDetails.state_name;
     divElement.appendChild(locationP);
-    
     let pElement = document.createElement('p');
     pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission;
     divElement.appendChild(pElement);
-    
     // Creating a button
     let buttonElement = document.createElement('button');
     buttonElement.textContent = 'Open Modal';
     buttonElement.onclick = function() {
       openModal(emissionDetails, facilityDetails);
     };
-    divElement.appendChild(buttonElement);
-    
-    // Assuming parentDiv is defined elsewhere in your code
+    divElement.appendChild(buttonElement); 
     parentDiv.appendChild(sectionElement);
     parentDiv.appendChild(divElement);
+    prepareTrigger(sectionElement);
   }
   
   function offsetLeft(coordinates) {
@@ -273,13 +266,27 @@ function openModal(emissionDetails, facilityDetails) {
       });
   }
 
+  function prepareTrigger(trigger) {
+
+        new ScrollMagic.Scene({
+                triggerElement: trigger
+            })
+            .setPin(trigger, {
+                pushFollowers: false
+            })
+            .addTo(controller)
+            .addIndicators()
+            .on("update", function(e) {
+                direction = (e.target.controller().info("scrollDirection"));
+            })
+            .on("start end", function(e) {
+                if (e.type != "start") {
+                    nextPlace(direction);
+                }
+            });
+}
+
   function prepareTriggers() {
-      var controller = new ScrollMagic.Controller({
-          globalSceneOptions: {
-              triggerHook: 'onLeave',
-              duration: "20%"
-          }
-      });
       var slides = document.querySelectorAll("section.panel");
       // Create scene for every slide
       for (var i = 0; i < slides.length; i++) {
