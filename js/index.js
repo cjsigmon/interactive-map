@@ -1,21 +1,12 @@
 $(document).ready(function() {
   const moveBtn = document.getElementById("moveBtn");
-  const API_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
+  const MAPBOX_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
   var ghost = 'no';
-  const REC_API = '934fdae4-cbd6-4730-8c69-104150aaf5cb';
-  const apiUrl = 'https://ridb.recreation.gov/api/v1/facilities';
-  const queryParams = new URLSearchParams({
-    query: 'ghost town',
-    limit: 50,
-    offset: 0,
-    full: true,
-    radius: 24,
-    lastupdated: '10-01-2023'
-  });
-  const url = `${apiUrl}?${queryParams.toString()}`;
+  const epa_url = 'https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/ROWS/0:20/JSON';
+    const facilityUrlBase = 'https://data.epa.gov/efservice/PUB_DIM_FACILITY/year/2022/facility_id/';
 
 
-  mapboxgl.accessToken = API_KEY;
+  mapboxgl.accessToken = MAPBOX_KEY;
   const map = new mapboxgl.Map({
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/streets-v12', // style URL
@@ -32,78 +23,84 @@ $(document).ready(function() {
   var controller = new ScrollMagic.Controller();
   var direction;
 
-  fetch('../data.json')
+  fetch(epa_url)
       .then(response => response.json())
-      .then(data => {
-          renderPage(data.RECDATA);
-          markerSet.add(locations[locationIndex].coordinates);
-          var centerOffset = offsetLeft(locations[locationIndex].coordinates);
-          map.setCenter(centerOffset);
-
-          const firstMarker = new mapboxgl.Marker()
-              .setLngLat(locations[locationIndex].coordinates)
-              .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
-              .addTo(map)
-              .getElement()
-              .addEventListener('click', () => {
-                  // Your click event logic goes here
-              });
-
-          prepareTriggers();
+      .then(async data => {
+          const pageRendered = await renderPage(data);
+        //   TODO
+        if (pageRendered) {
+            markerSet.add(locations[locationIndex].coordinates);
+            var centerOffset = offsetLeft(locations[locationIndex].coordinates);
+            map.setCenter(centerOffset);
+  
+            const firstMarker = new mapboxgl.Marker()
+                .setLngLat(locations[locationIndex].coordinates)
+                .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
+                .addTo(map)
+                .getElement()
+                .addEventListener('click', () => {
+                    // Your click event logic goes here
+                });
+  
+            prepareTriggers();
+        }
       })
       .catch(error => console.error('Error fetching JSON:', error));
 
-  function renderPage(facilityList) {
+  async function renderPage(facilityList) {
       for (let i = 0; i < facilityList.length; i++) {
-          try {
-              let stateOfFacility = facilityList[i].FACILITYADDRESS[0].AddressStateCode;
-              let hasDsc = findParagraphWithPhrase(facilityList[i].FacilityDescription);
-              if (!stateSet.has(stateOfFacility) && hasDsc) {
-
-
-                  stateSet.add(stateOfFacility);
-                  let name = stateSet.size + ") " + facilityList[i].FACILITYADDRESS[0].AddressStateCode + ": " + facilityList[i].FacilityName + ", coords: [" + facilityList[i].FacilityLatitude + "," + facilityList[i].FacilityLongitude + "]";
-                  locations.push({
-                      coordinates: [facilityList[i].FacilityLongitude, facilityList[i].FacilityLatitude],
-                      name: name
-                  });
-
-                
-                  addSection(facilityList[i].FacilityName, " "+ hasDsc + ": "+ghost);
-              }
-          } catch {
+        try {
+            const facilityDetails = await fetchFacility(facilityList[i].facility_id);
+            console.log("here is everythin about that facility");
+            console.log(facilityList[i]);
+            locations.push({
+                coordinates: [facilityDetails.longitude, facilityDetails.latitude],
+                name: facilityDetails.facility_name
+            });
+            let details = 
+                "Type: "+facilityDetails.facility_types+"\n"
+                +"Facility id: "+facilityList[i].facility_id+"\n"
+                +"CO2 emission: "+facilityList[i].co2e_emission+"\n"
+                +"sector id: "+facilityList[i].sector_id+"\n"
+                +"subsector id: "+facilityList[i].subsector_id+"\n";
+            addSection(facilityDetails.facility_name, details);
+            if (i==0) {
+                markerSet.add(locations[locationIndex].coordinates);
+                var centerOffset = offsetLeft(locations[locationIndex].coordinates);
+                map.setCenter(centerOffset);
+      
+                const firstMarker = new mapboxgl.Marker()
+                    .setLngLat(locations[locationIndex].coordinates)
+                    .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
+                    .addTo(map)
+                    .getElement()
+                    .addEventListener('click', () => {
+                        // Your click event logic goes here
+                    });      
+            }
+        } catch {
               // Skipping this one, it does not have a listed address
+              return false;
           }
       }
+      return true;
   }
 
-  function findParagraphWithPhrase(arg) {
-    const newDiv = document.createElement("div");
-    newDiv.innerHTML = arg;
-    
-    // Select all <p> elements within the div
-    const paragraphs = newDiv.querySelectorAll('p');
-  
-    // Iterate through each <p> tag
-    for (const paragraph of paragraphs) {
-      const wordsArray = paragraph.textContent.split(/\s+/); // Split by whitespace
-  
-      // Create a Set and convert each word to lowercase before adding to the set
-      const wordSet = new Set();
-      wordsArray.forEach(word => {
-        wordSet.add(word.toLowerCase());
-      });
-  
-      // Check if 'ghost' is in the set
-      if (wordSet.has('ghost') && !wordSet.has('holy')) {
-        // If 'ghost' is found, assign the paragraph text to ghost and return true
-        ghost = paragraph.textContent;
-        return true;
-      }
+
+  async function fetchFacility(facility_id) {
+    let facilityUrl = facilityUrlBase + facility_id + '/JSON'; 
+    try {
+    const response = await fetch(facilityUrl);
+    if (!response.ok) {
+        throw new Error('Network response was not ok.');
     }
-  
-    // If 'ghost' is not found in any paragraph, return false
-    return false;
+    const data = await response.json(); // Parsing JSON response
+    return data[0]; // Returning the fetched data
+  } catch (error) {
+    console.error('There was a problem fetching the data:', error);
+    // Handle errors or return a default value
+    return null;
+  }
   }
   
 
@@ -192,5 +189,9 @@ $(document).ready(function() {
                   }
               });
       }
+  }
+
+  function openModal(facilityDetails, emissionDetails) {
+    
   }
 });
