@@ -2,7 +2,7 @@ $(document).ready(function() {
   const moveBtn = document.getElementById("moveBtn");
   const MAPBOX_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
   var ghost = 'no';
-  const epa_url = 'https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/ROWS/0:20/JSON';
+  const epa_url = 'https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/ROWS/0:15/JSON';
     const facilityUrlBase = 'https://data.epa.gov/efservice/PUB_DIM_FACILITY/year/2022/facility_id/';
 
 
@@ -22,6 +22,7 @@ $(document).ready(function() {
   var locationIndex = 0;
   var controller = new ScrollMagic.Controller();
   var direction;
+  // Get the modal element by its ID
 
   fetch(epa_url)
       .then(response => response.json())
@@ -57,13 +58,7 @@ $(document).ready(function() {
                 coordinates: [facilityDetails.longitude, facilityDetails.latitude],
                 name: facilityDetails.facility_name
             });
-            let details = 
-                "Type: "+facilityDetails.facility_types+"\n"
-                +"Facility id: "+facilityList[i].facility_id+"\n"
-                +"CO2 emission: "+facilityList[i].co2e_emission+"\n"
-                +"sector id: "+facilityList[i].sector_id+"\n"
-                +"subsector id: "+facilityList[i].subsector_id+"\n";
-            addSection(facilityDetails.facility_name, details);
+            addSection(facilityList[i], facilityDetails);
             if (i==0) {
                 markerSet.add(locations[locationIndex].coordinates);
                 var centerOffset = offsetLeft(locations[locationIndex].coordinates);
@@ -104,21 +99,41 @@ $(document).ready(function() {
   }
   
 
-  function addSection(title, description) {
-      let sectionElement = document.createElement('section');
-      sectionElement.classList.add('panel');
-      let divElement = document.createElement('div');
-      divElement.classList.add('wonder');
-      let h2Element = document.createElement('h2');
-      h2Element.textContent = title;
-      divElement.appendChild(h2Element);
-      let pElement = document.createElement('p');
-      pElement.innerHTML = description;
-      divElement.appendChild(pElement);
-      parentDiv.appendChild(sectionElement);
-      parentDiv.appendChild(divElement);
-  }
+  function addSection(emissionDetails, facilityDetails) {
+    
 
+    let sectionElement = document.createElement('section');
+    sectionElement.classList.add('panel');
+    
+    let divElement = document.createElement('div');
+    divElement.classList.add('wonder');
+    
+    let h2Element = document.createElement('h2');
+    h2Element.textContent = facilityDetails.facility_name;
+    divElement.appendChild(h2Element);
+
+    let locationP = document.createElement('p');
+    console.log(facilityDetails);
+    locationP.innerHTML = "Location: "+facilityDetails.city + ", "+facilityDetails.state_name;
+    divElement.appendChild(locationP);
+    
+    let pElement = document.createElement('p');
+    pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission;
+    divElement.appendChild(pElement);
+    
+    // Creating a button
+    let buttonElement = document.createElement('button');
+    buttonElement.textContent = 'Open Modal';
+    buttonElement.onclick = function() {
+      openModal(emissionDetails, facilityDetails);
+    };
+    divElement.appendChild(buttonElement);
+    
+    // Assuming parentDiv is defined elsewhere in your code
+    parentDiv.appendChild(sectionElement);
+    parentDiv.appendChild(divElement);
+  }
+  
   function offsetLeft(coordinates) {
       let coordsCopy = [...coordinates];
       coordsCopy[0] += 1.8; // Adjust the longitude value to offset the center to the left
@@ -190,8 +205,18 @@ $(document).ready(function() {
               });
       }
   }
-
-  function openModal(facilityDetails, emissionDetails) {
-    
-  }
 });
+
+var myModal = document.getElementById('moreInfo');
+
+// Create a Bootstrap modal instance
+var modal = new bootstrap.Modal(myModal);
+
+function openModal(emissionDetails, facilityDetails) {
+    $('#moreInfoLabel').text(facilityDetails.facility_name);
+    $('#modalBody').html(`
+        <p>Facility id: ${facilityDetails.facility_id}</p>
+        <p>Emissions: ${emissionDetails.co2e_emission}</p>
+    `);
+    modal.show();
+  }

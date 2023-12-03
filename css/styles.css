@@ -1,9 +1,13 @@
   p, h1, h2, h3 {
     color: whitesmoke;
   }
-  .popup {
+  .popup, #modalTitle, #modalBody > p {
     color: black;
   }
+  #modalBody {
+    padding: 2rem;
+  }
+
   .starter-template {
     padding: 3rem 1.5rem;
     text-align: center;
@@ -52,6 +56,15 @@
 
   .starter-template {
     text-align: left;
+  }
+
+  @media (min-width: 576px) {
+    .modal-dialog {
+      max-width: 99%;
+      margin: 1.75rem auto;
+      height: 99%;
+      max-height: 99%;
+  }
   }
 
 
