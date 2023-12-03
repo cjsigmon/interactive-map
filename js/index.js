@@ -214,9 +214,22 @@ var modal = new bootstrap.Modal(myModal);
 
 function openModal(emissionDetails, facilityDetails) {
     $('#moreInfoLabel').text(facilityDetails.facility_name);
+  
     $('#modalBody').html(`
-        <p>Facility id: ${facilityDetails.facility_id}</p>
-        <p>Emissions: ${emissionDetails.co2e_emission}</p>
+      <h4>Facility Details:</h4>
+      <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
+      <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
+      <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
+      <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+      <hr>
+      <h4>Emission Details:</h4>
+      <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
+      <p><strong>Year:</strong> ${emissionDetails.year}</p>
+      <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
+      <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
+      <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
     `);
+  
     modal.show();
   }
+  
