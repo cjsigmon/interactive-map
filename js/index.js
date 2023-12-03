@@ -138,9 +138,7 @@ function openModal(emissionDetails, facilityDetails) {
                 .getElement()
                 .addEventListener('click', () => {
                     // Your click event logic goes here
-                });
-  
-            // prepareTriggers();
+                });  
         }
       })
       .catch(error => console.error('Error fetching JSON:', error));
@@ -286,28 +284,6 @@ function openModal(emissionDetails, facilityDetails) {
             });
 }
 
-  function prepareTriggers() {
-      var slides = document.querySelectorAll("section.panel");
-      // Create scene for every slide
-      for (var i = 0; i < slides.length; i++) {
-          new ScrollMagic.Scene({
-                  triggerElement: slides[i]
-              })
-              .setPin(slides[i], {
-                  pushFollowers: false
-              })
-              .addTo(controller)
-              .addIndicators()
-              .on("update", function(e) {
-                  direction = (e.target.controller().info("scrollDirection"));
-              })
-              .on("start end", function(e) {
-                  if (e.type != "start") {
-                      nextPlace(direction);
-                  }
-              });
-      }
-  }
 });
 
 
