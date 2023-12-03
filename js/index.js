@@ -14,6 +14,102 @@ $(document).ready(function() {
       zoom: 7 // starting zoom
   });
 
+  var myModal = document.getElementById('moreInfo');
+
+// Create a Bootstrap modal instance
+var modal = new bootstrap.Modal(myModal);
+
+function openModal(emissionDetails, facilityDetails) {
+    $('#moreInfoLabel').text(facilityDetails.facility_name);
+  
+    const GOOGLE_KEY = 'AIzaSyBRiLHAFGHj2prk1e84nCtebLDqN32mgog';
+    const searchEngineId = 'a79d473b82b9c43b5';
+    const facilityName = encodeURIComponent(facilityDetails.facility_name);
+    const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${facilityName}&cx=${searchEngineId}&key=${GOOGLE_KEY}&searchType=image`;
+  
+    $.ajax({
+      url: apiUrl,
+      dataType: 'json',
+      success: function (data) {
+        const validImageItems = data.items.filter(item => {
+            const url = item.link.toLowerCase();
+            return url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif');
+          });
+        if (validImageItems.length > 0) {
+            const imageUrl = validImageItems[0].link;  
+          $('#modalBody').html(`
+          <div class='row'>
+            <div class='col-md-5'>
+                <img width='400' src="${imageUrl}" alt="Facility Image">
+            </div>
+            <div class='col-md-7'>
+                <h4>Facility Details:</h4>
+                <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
+                <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
+                <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
+                <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+            </div>
+          </div>
+          <hr>
+          <div class='row'>
+            <div class='col-md-7'>
+                <h4>Emission Details:</h4>
+                <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
+                <p><strong>Year:</strong> ${emissionDetails.year}</p>
+                <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
+                <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
+                <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
+            </div>
+          <div class='col-md-5'></div>
+      </div>
+        </div>
+          `);
+  
+          modal.show();
+        } else {
+          // No image found
+          $('#modalBody').html(`
+          <h4>Facility Details:</h4>
+          <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
+          <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
+          <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
+          <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+          <hr>
+          <h4>Emission Details:</h4>
+          <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
+          <p><strong>Year:</strong> ${emissionDetails.year}</p>
+          <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
+          <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
+          <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
+            <p>No image found for ${facilityDetails.facility_name}</p>
+          `);
+  
+          modal.show();
+        }
+      },
+      error: function () {
+        // Error handling
+        $('#modalBody').html(`
+        <h4>Facility Details:</h4>
+        <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
+        <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
+        <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
+        <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+        <hr>
+        <h4>Emission Details:</h4>
+        <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
+        <p><strong>Year:</strong> ${emissionDetails.year}</p>
+        <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
+        <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
+        <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
+          <p>Error fetching image</p>
+        `);
+  
+        modal.show();
+      }
+    });
+  }
+
   var stateSet = new Set();
 
   var parentDiv = document.getElementById('bodyText');
@@ -207,29 +303,8 @@ $(document).ready(function() {
   }
 });
 
-var myModal = document.getElementById('moreInfo');
 
-// Create a Bootstrap modal instance
-var modal = new bootstrap.Modal(myModal);
+  
 
-function openModal(emissionDetails, facilityDetails) {
-    $('#moreInfoLabel').text(facilityDetails.facility_name);
-  
-    $('#modalBody').html(`
-      <h4>Facility Details:</h4>
-      <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
-      <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
-      <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
-      <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
-      <hr>
-      <h4>Emission Details:</h4>
-      <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
-      <p><strong>Year:</strong> ${emissionDetails.year}</p>
-      <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
-      <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
-      <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
-    `);
-  
-    modal.show();
-  }
+
   

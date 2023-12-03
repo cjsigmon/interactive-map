@@ -1,7 +1,7 @@
   p, h1, h2, h3 {
     color: whitesmoke;
   }
-  .popup, #modalTitle, #modalBody > p {
+  .popup, #modalTitle, #modalBody > .row > div > p {
     color: black;
   }
   #modalBody {
