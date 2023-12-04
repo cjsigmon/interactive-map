@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    var myLoadingModal = document.getElementById('loadingModal');
+    var loadingModal = new bootstrap.Modal(myLoadingModal);
+    loadingModal.show();
+
+
   const moveBtn = document.getElementById("moveBtn");
   const MAPBOX_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
   var ghost = 'no';
@@ -123,7 +128,7 @@ function openModal(emissionDetails, facilityDetails) {
 
   getTop15Results()
       .then(async data => {
-        console.log("getting top 15 results")
+        loadingModal.hide();
           const pageRendered = await renderPage(data);
         //   TODO
         if (pageRendered) {

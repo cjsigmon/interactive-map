@@ -80,6 +80,27 @@
             </div>
           </div>
 
+          <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modalTitle" id="moreInfoLabel">Loading EPA data...</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div id="modalBody">
+                  <p class="modalText" id="chunkP">Chunk 0</p>
+                  <p class="modalText">Fetching and sorting chunk of 1000 rows...</p>
+                  <p class="modalText" id="resultP">Results</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
     </main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript

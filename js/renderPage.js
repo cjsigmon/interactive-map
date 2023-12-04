@@ -45,6 +45,7 @@ async function fetchData(startRow, endRow) {
         // Extract the top 15 results
         const topFifteen = chunk.slice(0, 15);
         console.log("Top fifteen from chunk:", topFifteen);
+        $('#chunkP').text('Row '+startRow+' through '+endRow);
         all.push(...topFifteen);
       }
       startRow += 1000;
