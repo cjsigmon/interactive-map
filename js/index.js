@@ -121,9 +121,9 @@ function openModal(emissionDetails, facilityDetails) {
   var direction;
   // Get the modal element by its ID
 
-  fetch(epa_url)
-      .then(response => response.json())
+  getTop15Results()
       .then(async data => {
+        console.log("getting top 15 results")
           const pageRendered = await renderPage(data);
         //   TODO
         if (pageRendered) {
@@ -147,8 +147,7 @@ function openModal(emissionDetails, facilityDetails) {
       for (let i = 0; i < facilityList.length; i++) {
         try {
             const facilityDetails = await fetchFacility(facilityList[i].facility_id);
-            console.log("here is everythin about that facility");
-            console.log(facilityList[i]);
+
             locations.push({
                 coordinates: [facilityDetails.longitude, facilityDetails.latitude],
                 name: facilityDetails.facility_name
@@ -203,7 +202,6 @@ function openModal(emissionDetails, facilityDetails) {
     h2Element.textContent = facilityDetails.facility_name;
     divElement.appendChild(h2Element);
     let locationP = document.createElement('p');
-    console.log(facilityDetails);
     locationP.innerHTML = "Location: "+facilityDetails.city + ", "+facilityDetails.state_name;
     divElement.appendChild(locationP);
     let pElement = document.createElement('p');
