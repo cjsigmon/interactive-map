@@ -1,7 +1,7 @@
 // Function to fetch data from the API endpoint
 async function fetchData(startRow, endRow) {
     try {
-      const response = await fetch(`https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/ROWS/${startRow}:${endRow}/JSON`);
+      const response = await fetch(`https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/PUB_DIM_FACILITY/year/2022/facility_types/BEGINNING/Direct/ROWS/${startRow}:${endRow}/JSON`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -14,7 +14,7 @@ async function fetchData(startRow, endRow) {
     let COUNT = 0;
   
     try {
-      const countResponse = await fetch('https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/COUNT/JSON');
+      const countResponse = await fetch('https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/year/2022/gas_id/1/PUB_DIM_FACILITY/year/2022/facility_types/BEGINNING/Direct/COUNT/JSON');
       const countData = await countResponse.json();
       COUNT = countData[0].TOTALQUERYRESULTS;
       console.log("Count data:", COUNT);

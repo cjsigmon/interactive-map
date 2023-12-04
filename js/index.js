@@ -22,13 +22,14 @@ $(document).ready(function() {
   });
 
 
-function openModal(emissionDetails, facilityDetails) {
-    $('#moreInfoLabel').text(facilityDetails.facility_name);
+function openModal(emissionDetails) {
+    $('#moreInfoLabel').text(emissionDetails.facility_name);
   
     const GOOGLE_KEY = 'AIzaSyBRiLHAFGHj2prk1e84nCtebLDqN32mgog';
     const searchEngineId = 'a79d473b82b9c43b5';
-    const facilityName = encodeURIComponent(facilityDetails.facility_name);
-    const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${facilityName}&cx=${searchEngineId}&key=${GOOGLE_KEY}&searchType=image`;
+    const facilityName = encodeURIComponent(emissionDetails.facility_name);
+    const locationDetails = encodeURIComponent(emissionDetails.address1);
+    const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${facilityName}+power+plant&cx=${searchEngineId}&key=${GOOGLE_KEY}&searchType=image`;
   
     $.ajax({
       url: apiUrl,
@@ -47,10 +48,10 @@ function openModal(emissionDetails, facilityDetails) {
             </div>
             <div class='col-md-7'>
                 <h4>Facility Details:</h4>
-                <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
-                <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
-                <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
-                <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+                <p><strong>Facility Name:</strong> ${emissionDetails.facility_name}</p>
+                <p><strong>Address:</strong> ${emissionDetails.address1}, ${emissionDetails.city}, ${emissionDetails.state} ${emissionDetails.zip}</p>
+                <p><strong>County:</strong> ${emissionDetails.county} (${emissionDetails.county_fips})</p>
+                <p><strong>NAICS Code:</strong> ${emissionDetails.naics_code}</p>
             </div>
           </div>
           <hr>
@@ -73,10 +74,10 @@ function openModal(emissionDetails, facilityDetails) {
           // No image found
           $('#modalBody').html(`
           <h4>Facility Details:</h4>
-          <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
-          <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
-          <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
-          <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+          <p><strong>Facility Name:</strong> ${emissionDetails.facility_name}</p>
+          <p><strong>Address:</strong> ${emissionDetails.address1}, ${emissionDetails.city}, ${emissionDetails.state} ${emissionDetails.zip}</p>
+          <p><strong>County:</strong> ${emissionDetails.county} (${emissionDetails.county_fips})</p>
+          <p><strong>NAICS Code:</strong> ${emissionDetails.naics_code}</p>
           <hr>
           <h4>Emission Details:</h4>
           <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
@@ -84,7 +85,7 @@ function openModal(emissionDetails, facilityDetails) {
           <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
           <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
           <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
-            <p>No image found for ${facilityDetails.facility_name}</p>
+            <p>No image found for ${emissionDetails.facility_name}</p>
           `);
   
           modal.show();
@@ -94,10 +95,10 @@ function openModal(emissionDetails, facilityDetails) {
         // Error handling
         $('#modalBody').html(`
         <h4>Facility Details:</h4>
-        <p><strong>Facility Name:</strong> ${facilityDetails.facility_name}</p>
-        <p><strong>Address:</strong> ${facilityDetails.address1}, ${facilityDetails.city}, ${facilityDetails.state} ${facilityDetails.zip}</p>
-        <p><strong>County:</strong> ${facilityDetails.county} (${facilityDetails.county_fips})</p>
-        <p><strong>NAICS Code:</strong> ${facilityDetails.naics_code}</p>
+        <p><strong>Facility Name:</strong> ${emissionDetails.facility_name}</p>
+        <p><strong>Address:</strong> ${emissionDetails.address1}, ${emissionDetails.city}, ${emissionDetails.state} ${emissionDetails.zip}</p>
+        <p><strong>County:</strong> ${emissionDetails.county} (${emissionDetails.county_fips})</p>
+        <p><strong>NAICS Code:</strong> ${emissionDetails.naics_code}</p>
         <hr>
         <h4>Emission Details:</h4>
         <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
@@ -151,13 +152,12 @@ function openModal(emissionDetails, facilityDetails) {
   async function renderPage(facilityList) {
       for (let i = 0; i < facilityList.length; i++) {
         try {
-            const facilityDetails = await fetchFacility(facilityList[i].facility_id);
 
             locations.push({
-                coordinates: [facilityDetails.longitude, facilityDetails.latitude],
-                name: facilityDetails.facility_name
+                coordinates: [facilityList[i].longitude, facilityList[i].latitude],
+                name: facilityList[i].facility_name
             });
-            addSection(facilityList[i], facilityDetails);
+            addSection(facilityList[i]);
             if (i==0) {
                 markerSet.add(locations[locationIndex].coordinates);
                 var centerOffset = offsetLeft(locations[locationIndex].coordinates);
@@ -181,33 +181,19 @@ function openModal(emissionDetails, facilityDetails) {
   }
 
 
-  async function fetchFacility(facility_id) {
-    let facilityUrl = facilityUrlBase + facility_id + '/JSON'; 
-    try {
-    const response = await fetch(facilityUrl);
-    if (!response.ok) {
-        throw new Error('Network response was not ok.');
-    }
-    const data = await response.json(); // Parsing JSON response
-    return data[0]; // Returning the fetched data
-  } catch (error) {
-    console.error('There was a problem fetching the data:', error);
-    // Handle errors or return a default value
-    return null;
-  }
-  }
+
   
-  function addSection(emissionDetails, facilityDetails) {
+  function addSection(emissionDetails) {
     let sectionElement = document.createElement('section');
     sectionElement.classList.add('panel');
 
     let divElement = document.createElement('div');
     divElement.classList.add('wonder');
     let h2Element = document.createElement('h2');
-    h2Element.textContent = facilityDetails.facility_name;
+    h2Element.textContent = emissionDetails.facility_name;
     divElement.appendChild(h2Element);
     let locationP = document.createElement('p');
-    locationP.innerHTML = "Location: "+facilityDetails.city + ", "+facilityDetails.state_name;
+    locationP.innerHTML = "Location: "+emissionDetails.city + ", "+emissionDetails.state_name;
     divElement.appendChild(locationP);
     let pElement = document.createElement('p');
     pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission;
@@ -216,7 +202,7 @@ function openModal(emissionDetails, facilityDetails) {
     let buttonElement = document.createElement('button');
     buttonElement.textContent = 'Open Modal';
     buttonElement.onclick = function() {
-      openModal(emissionDetails, facilityDetails);
+      openModal(emissionDetails);
     };
     divElement.appendChild(buttonElement); 
     parentDiv.appendChild(sectionElement);
