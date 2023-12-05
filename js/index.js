@@ -3,6 +3,14 @@ $(document).ready(function() {
     var loadingModal = new bootstrap.Modal(myLoadingModal);
     loadingModal.show();
 
+    const customMarker = document.createElement('div');
+    customMarker.className = 'custom-marker'; // Apply a class for styling
+    // You can set the icon using CSS or inline styles
+    customMarker.style.backgroundImage = 'url(../img/download.png)';
+    customMarker.style.width = '40px'; // Set the width of the icon
+    customMarker.style.height = '40px'; // Set the height of the icon
+
+
 
   const moveBtn = document.getElementById("moveBtn");
   const MAPBOX_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
@@ -137,14 +145,7 @@ function openModal(emissionDetails) {
             var centerOffset = offsetLeft(locations[locationIndex].coordinates);
             map.setCenter(centerOffset);
   
-            const firstMarker = new mapboxgl.Marker()
-                .setLngLat(locations[locationIndex].coordinates)
-                .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
-                .addTo(map)
-                .getElement()
-                .addEventListener('click', () => {
-                    // Your click event logic goes here
-                });  
+ 
         }
       })
       .catch(error => console.error('Error fetching JSON:', error));
@@ -163,7 +164,7 @@ function openModal(emissionDetails) {
                 var centerOffset = offsetLeft(locations[locationIndex].coordinates);
                 map.setCenter(centerOffset);
       
-                const firstMarker = new mapboxgl.Marker()
+                const firstMarker = new mapboxgl.Marker(customMarker)
                     .setLngLat(locations[locationIndex].coordinates)
                     .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
                     .addTo(map)
@@ -241,7 +242,7 @@ function openModal(emissionDetails) {
       map.on('moveend', () => {
           if (!markerSet.has(locations[locationIndex].coordinates)) {
               markerSet.add(locations[locationIndex].coordinates);
-              const marker = new mapboxgl.Marker()
+              const marker = new mapboxgl.Marker(customMarker)
                   .setLngLat(locations[locationIndex].coordinates)
                   .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
                   .addTo(map)

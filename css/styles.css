@@ -88,5 +88,11 @@
     z-index: 100 !important;
   }
 
+  .custom-marker {
+    background-size: cover;
+    /* Add any additional styles for your custom marker */
+  }
+  
+
 
 
