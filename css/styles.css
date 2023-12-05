@@ -8,6 +8,8 @@
     padding: 2rem;
   }
 
+
+
   .starter-template {
     padding: 3rem 1.5rem;
     text-align: center;
@@ -65,6 +67,25 @@
       height: 99%;
       max-height: 99%;
   }
+  }
+
+  .btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+
+  #fullscreenText {
+    margin-top: 1rem;
+  }
+
+  #fullscreenMap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 4rem;
+
+    z-index: 100 !important;
   }
 
 

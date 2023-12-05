@@ -1,3 +1,6 @@
+// tribal_land_id/>/0
+var textIsFullScrn = false;
+var mapIsFullScrn = false;
 // Function to fetch data from the API endpoint
 async function fetchData(startRow, endRow) {
     try {
@@ -53,13 +56,26 @@ async function fetchData(startRow, endRow) {
     }
     return all;
   }
-  
-  // Call getTop15Results and log the returned value
-//   getTop15Results()
-//     .then((topFifteenOverall) => {
-//       console.log('Top fifteen overall:', topFifteenOverall);
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error);
-//     });
-  
+
+  function fullscreenText() {
+    if (!textIsFullScrn) {
+      $('#fullscreenMap').hide();
+      $('#bodyText').removeClass('col-md-6').addClass('col-md-12');
+    } else {
+      $('#fullscreenMap').show();
+
+      $('#bodyText').removeClass('col-md-12').addClass('col-md-6');
+
+    }
+    textIsFullScrn = !textIsFullScrn;
+  }
+
+  function fullscreenMap() {
+    if (!mapIsFullScrn) {
+      $('#bodyText').removeClass('col-md-6').addClass('col-md-0');
+    } else {
+      $('#bodyText').removeClass('col-md-0').addClass('col-md-6');
+
+    }
+    mapIsFullScrn = !mapIsFullScrn;
+  }
