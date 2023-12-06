@@ -8,6 +8,14 @@
     padding: 2rem;
   }
 
+  .navbar-dark, button, .btn, .btn-primary {
+    background-color: rgb(0, 156, 104);
+    color: #f9f9f9;
+  }
+  .modal-header {
+    border-bottom: 1px solid rgb(0, 156, 104);
+  }
+
 
 
   .starter-template {
@@ -51,10 +59,24 @@
     margin-top: 10%;
     margin-bottom: 60%;
   }
+  .mapboxgl-popup-content > div, .wonder {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
 
   .wonder {
     margin-bottom: 50%;
   }
+  .wonder > h2 {
+    padding-top: 3.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  .wonder > p {
+    font-size: 20pt;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
 
   .starter-template {
     text-align: left;
@@ -69,27 +91,34 @@
   }
   }
 
-  .btn-container {
-    width: 100%;
-    display: flex;
-    justify-content: end;
-  }
-
-  #fullscreenText {
-    margin-top: 1rem;
-  }
-
-  #fullscreenMap {
-    position: absolute;
+  #button-container {
+    z-index: 1;
+    position: fixed;
     top: 0;
-    left: 0;
     margin-top: 4rem;
-
-    z-index: 100 !important;
   }
+
+  #fullscreenText{
+    margin-right: 2rem;
+  }
+
+  #popupContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  #popupContent h3 {
+    text-align: center;
+  }
+
+ 
 
   .custom-marker {
     background-size: cover;
+    background-image: url('../img/factoryArt.png');
+    height: 40px;
+    width: 40px;
+    box-shadow: 0px 0px 30px rgb(0, 156, 104);
     /* Add any additional styles for your custom marker */
   }
 

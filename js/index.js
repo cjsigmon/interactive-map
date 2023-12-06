@@ -5,12 +5,8 @@ $(document).ready(function() {
     loadingModal.show();
 
 
-    const customMarker = document.createElement('div');
-    customMarker.className = 'custom-marker'; // Apply a class for styling
-    // You can set the icon using CSS or inline styles
-    customMarker.style.backgroundImage = 'url(../img/download.png)';
-    customMarker.style.width = '40px'; // Set the width of the icon
-    customMarker.style.height = '40px'; // Set the height of the icon
+    const customMarker = document.getElementById('customMarker');
+
 
     const sectors = ["no_id","no_id","Waste","Powerplants","Refineries",
     "Chemicals","Metals","Pulp and Paper","Minerals","Coal-based Liquid Fuel Supply",
@@ -55,7 +51,7 @@ $(document).ready(function() {
   mapboxgl.accessToken = MAPBOX_KEY;
   const map = new mapboxgl.Map({
       container: 'map', // container ID
-      style: 'mapbox://styles/mapbox/streets-v12', // style URL
+      style: 'mapbox://styles/mapbox/dark-v10', // Use the 'dark' style
       center: [5, 5], // starting position [lng, lat]
       zoom: 7 // starting zoom
   });
@@ -184,7 +180,7 @@ function openModal(emissionDetails) {
                 coordinates: [facilityList[i].longitude, facilityList[i].latitude],
                 name: facilityList[i].facility_name
             });
-            addSection(facilityList[i]);
+            addSection(facilityList[i], i);
             if (i==0) {
                 markerSet.add(locations[locationIndex].coordinates);
                 var centerOffset = offsetLeft(locations[locationIndex].coordinates);
@@ -195,7 +191,7 @@ function openModal(emissionDetails) {
                   .setPopup(new mapboxgl.Popup().setHTML(`
                   <div id="popupContent">
                     <h3>Facility: ${jsonRef[i].facility_name}</h3>
-                    <button id="popupButton">Read more</button>
+                    <button class="btn btn-secondary" id="popupButton">Read more</button>
                   </div>
                   `))
                   .addTo(map);
@@ -220,20 +216,27 @@ function openModal(emissionDetails) {
 
 
   
-  function addSection(emissionDetails) {
+  function addSection(emissionDetails, i) {
     let sectionElement = document.createElement('section');
     sectionElement.classList.add('panel');
 
     let divElement = document.createElement('div');
     divElement.classList.add('wonder');
+    const divId = "location"+i;
+    divElement.id = divId;
     let h2Element = document.createElement('h2');
-    h2Element.textContent = emissionDetails.facility_name;
+    let thisSector = sectors[emissionDetails.sector_id];
+    if (thisSector.endsWith('s')) {
+      thisSector = thisSector.slice(0, -1);
+    }
+    h2Element.textContent = emissionDetails.facility_name + " " + thisSector;
     divElement.appendChild(h2Element);
     let locationP = document.createElement('p');
+
     locationP.innerHTML = "Location: "+emissionDetails.city + ", "+emissionDetails.state_name;
     divElement.appendChild(locationP);
     let pElement = document.createElement('p');
-    pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission.toLocaleString();
+    pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission.toLocaleString() + " metric tons";
     divElement.appendChild(pElement);
     // Creating a button
     let buttonElement = document.createElement('button');
@@ -245,6 +248,14 @@ function openModal(emissionDetails) {
     divElement.appendChild(buttonElement); 
     parentDiv.appendChild(sectionElement);
     parentDiv.appendChild(divElement);
+
+    // <a class="dropdown-item" href="#">Action</a>
+    let dropdownItem = document.createElement('a');
+    dropdownItem.classList.add('dropdown-item');
+    dropdownItem.href = "#"+divId;
+    dropdownItem.textContent = emissionDetails.facility_name;
+    document.getElementById('dropMenu').appendChild(dropdownItem);
+   
     prepareTrigger(sectionElement);
   }
   
@@ -286,7 +297,7 @@ function openModal(emissionDetails) {
                   .setPopup(new mapboxgl.Popup().setHTML(`
                   <div id="${newId}">
                     <h3>Facility: ${jsonRef[locationIndex].facility_name}</h3>
-                    <button class="popupButton" data-index="${locationIndex}">Read more</button>
+                    <button class="btn btn-secondary popupButton" data-index="${locationIndex}">Read more</button>
                     </div>
                   `))
                   .addTo(map);
@@ -294,9 +305,10 @@ function openModal(emissionDetails) {
                   marker.getPopup().on('open', () => {
                     const popupContent = document.getElementById(newId);
                     const popupButtons = popupContent.getElementsByClassName('popupButton');
-                    
+                    console.log('opened div len', popupButtons.length)
                     for (let i = 0; i < popupButtons.length; i++) {
                       popupButtons[i].addEventListener('click', (event) => {
+                        console.log('YOU CLICKED')
                         const dataIndex = event.target.getAttribute('data-index');
                         openModal(jsonRef[dataIndex]);
                       });
