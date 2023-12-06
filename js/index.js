@@ -1,9 +1,9 @@
-var uniIndex = 0;
 $(document).ready(function() {
   var jsonRef;
     var myLoadingModal = document.getElementById('loadingModal');
     var loadingModal = new bootstrap.Modal(myLoadingModal);
     loadingModal.show();
+
 
     const customMarker = document.createElement('div');
     customMarker.className = 'custom-marker'; // Apply a class for styling
@@ -12,7 +12,36 @@ $(document).ready(function() {
     customMarker.style.width = '40px'; // Set the width of the icon
     customMarker.style.height = '40px'; // Set the height of the icon
 
-
+    const sectors = ["no_id","no_id","Waste","Powerplants","Refineries",
+    "Chemicals","Metals","Pulp and Paper","Minerals","Coal-based Liquid Fuel Supply",
+    "Petroleum Product Suppliers","Natural Gas and Natural Gas Liquids Suppliers",
+    "Industrial Gas Suppliers","Suppliers of CO2","Other","Petroleum and Natural Gas Systems",
+    "Import and Export of Equipment Containing Fluorintaed GHGs","Injection of CO2"
+  ];
+  const subsectors = [
+    "DEFAULT_VALUE", // Index 0 is a default value
+    "Power Plants", "Adipic Acid Production", "Aluminum Production", "Ammonia Manufacturing",
+    "Cement Production", "Ferroalloy Production", "Glass Production", "HCFC-22 Prod./HFC-23 Dest.",
+    "Hydrogen Production", "Iron and Steel Production", "Lead Production", "Lime Manufacturing",
+    "Nitric Acid Production", "Petrochemical Production", "Petroleum Refineries",
+    "Phosphoric Acid Production", "Pulp and Paper", "Silicon Carbide Production",
+    "Soda Ash Manufacturing", "Titanium Dioxide Production", "Zinc Production",
+    "Municipal Landfills", "Food Processing", "Ethanol Production", "Manufacturing", "Other",
+    "Military", "Universities", "Other Chemicals", "Other Metals", "Other Minerals",
+    "Other Paper Producers", "Producer", "Importer", "Exporter", "Producer", "Importer",
+    "Exporter", "Producer", "Importer", "Exporter", "Importer", "Exporter",
+    "Natural Gas Distribution", "Natural Gas Liquids Fractionation",
+    "Offshore Petroleum & Natural Gas Production", "Onshore Petroleum & Natural Gas Production",
+    "Natural Gas Processing", "Natural Gas Transmission/Compression",
+    "Natural Gas Local Distribution Companies", "Underground Natural Gas Storage",
+    "Liquefied Natural Gas Storage", "Liquefied Natural Gas Imp./Exp. Equipment",
+    "Fluorinated GHG Production", "Underground Coal Mines", "Use of Electrical Equipment",
+    "Electronics Manufacturing", "Electrical Equipment Manufacturers", "Magnesium",
+    "Industrial Landfills", "Wastewater Treatment", "Solid Waste Combustion", "Importer",
+    "Exporter", "Injection of Carbon Dioxide", "Geologic Sequestration of Carbon Dioxide",
+    "CO2 Capture", "CO2 Production Wells", "Other Petroleum and Natural Gas Systems",
+    "Petroleum & Natural Gas Gathering & Boosting", "Natural Gas Transmission Pipelines"
+  ];
 
   const moveBtn = document.getElementById("moveBtn");
   const MAPBOX_KEY = 'pk.eyJ1IjoiY2FsZWJqc2lnbW9uIiwiYSI6ImNscGh0Y2RtaDA1NDAycXFzMmI3ZDRuamkifQ.yzxnVlFnXxb0jjMzWlv_EQ';
@@ -44,6 +73,8 @@ function openModal(emissionDetails) {
     const facilityName = encodeURIComponent(emissionDetails.facility_name);
     const locationDetails = encodeURIComponent(emissionDetails.address1);
     const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${facilityName}+power+plant&cx=${searchEngineId}&key=${GOOGLE_KEY}&searchType=image`;
+
+  
   
     $.ajax({
       url: apiUrl,
@@ -65,22 +96,14 @@ function openModal(emissionDetails) {
                 <p><strong>Facility Name:</strong> ${emissionDetails.facility_name}</p>
                 <p><strong>Address:</strong> ${emissionDetails.address1}, ${emissionDetails.city}, ${emissionDetails.state} ${emissionDetails.zip}</p>
                 <p><strong>County:</strong> ${emissionDetails.county} (${emissionDetails.county_fips})</p>
-                <p><strong>NAICS Code:</strong> ${emissionDetails.naics_code}</p>
+                <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission.toLocaleString()} metric tons</p>
+                <p><strong>Year:</strong> ${emissionDetails.year}</p>
+                <p><strong>Sector:</strong> ${sectors[emissionDetails.sector_id]}</p>
+                <p><strong>Subsector:</strong> ${subsectors[emissionDetails.subsector_id]}</p>
             </div>
           </div>
           <hr>
-          <div class='row'>
-            <div class='col-md-7'>
-                <h4>Emission Details:</h4>
-                <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
-                <p><strong>Year:</strong> ${emissionDetails.year}</p>
-                <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
-                <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
-                <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
-            </div>
-          <div class='col-md-5'></div>
-      </div>
-        </div>
+
           `);
   
           modal.show();
@@ -91,14 +114,12 @@ function openModal(emissionDetails) {
           <p><strong>Facility Name:</strong> ${emissionDetails.facility_name}</p>
           <p><strong>Address:</strong> ${emissionDetails.address1}, ${emissionDetails.city}, ${emissionDetails.state} ${emissionDetails.zip}</p>
           <p><strong>County:</strong> ${emissionDetails.county} (${emissionDetails.county_fips})</p>
-          <p><strong>NAICS Code:</strong> ${emissionDetails.naics_code}</p>
           <hr>
           <h4>Emission Details:</h4>
-          <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
+          <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission.toLocaleString()} metric tons</p>
           <p><strong>Year:</strong> ${emissionDetails.year}</p>
-          <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
+          <p><strong>Sector:</strong> ${sectors[emissionDetails.sector_id]}</p>
           <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
-          <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
             <p>No image found for ${emissionDetails.facility_name}</p>
           `);
   
@@ -112,14 +133,12 @@ function openModal(emissionDetails) {
         <p><strong>Facility Name:</strong> ${emissionDetails.facility_name}</p>
         <p><strong>Address:</strong> ${emissionDetails.address1}, ${emissionDetails.city}, ${emissionDetails.state} ${emissionDetails.zip}</p>
         <p><strong>County:</strong> ${emissionDetails.county} (${emissionDetails.county_fips})</p>
-        <p><strong>NAICS Code:</strong> ${emissionDetails.naics_code}</p>
         <hr>
         <h4>Emission Details:</h4>
-        <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission} metric tons</p>
+        <p><strong>CO2 Emission:</strong> ${emissionDetails.co2e_emission.toLocaleString()} metric tons</p>
         <p><strong>Year:</strong> ${emissionDetails.year}</p>
-        <p><strong>Sector ID:</strong> ${emissionDetails.sector_id}</p>
+        <p><strong>Sector:</strong> ${sectors[emissionDetails.sector_id]}</p>
         <p><strong>Subsector ID:</strong> ${emissionDetails.subsector_id}</p>
-        <p><strong>Gas ID:</strong> ${emissionDetails.gas_id}</p>
           <p>Error fetching image</p>
         `);
   
@@ -170,38 +189,28 @@ function openModal(emissionDetails) {
                 markerSet.add(locations[locationIndex].coordinates);
                 var centerOffset = offsetLeft(locations[locationIndex].coordinates);
                 map.setCenter(centerOffset);
-
-                console.log('jsonRef[i]', jsonRef[i]);
-
-
-      
-// Create a Mapbox marker with a popup containing HTML content
-const firstMarker = new mapboxgl.Marker(customMarker)
-  .setLngLat(locations[locationIndex].coordinates)
-  .setPopup(new mapboxgl.Popup().setHTML('<div id="popupContent"><button id="popupButton">Click me</button></div>'))
-  .addTo(map);
-
-// Add an event listener to the map for the 'open' event of the popup
-firstMarker.getPopup().on('open', () => {
-  // Get the DOM element of the popup content
-  const popupContent = document.getElementById('popupContent');
-
-  // Add a click event listener to the button inside the popup content
-  const popupButton = document.getElementById('popupButton');
-  popupButton.addEventListener('click', () => {
-    // Call a function or perform an action when the button is clicked
-    yourFunction(5); // Replace 'yourFunction' with the function you want to call
-  });
-});
-
-function yourFunction(num) {
-  openModal(jsonRef[num]);
-}
-
-
+                // Create a Mapbox marker with a popup containing HTML content
+                const firstMarker = new mapboxgl.Marker(customMarker)
+                  .setLngLat(locations[locationIndex].coordinates)
+                  .setPopup(new mapboxgl.Popup().setHTML(`
+                  <div id="popupContent">
+                    <h3>Facility: ${jsonRef[i].facility_name}</h3>
+                    <button id="popupButton">Read more</button>
+                  </div>
+                  `))
+                  .addTo(map);
+                firstMarker.getPopup().on('open', () => {
+                  const popupContent = document.getElementById('popupContent');
+                  const popupButton = document.getElementById('popupButton');
+                  popupButton.addEventListener('click', () => {
+                    modalIndex(i);
+                  });
+                });
+                function modalIndex(num) {
+                  openModal(jsonRef[num]);
+                }
             }
         } catch {
-              // Skipping this one, it does not have a listed address
               return false;
           }
       }
@@ -224,11 +233,12 @@ function yourFunction(num) {
     locationP.innerHTML = "Location: "+emissionDetails.city + ", "+emissionDetails.state_name;
     divElement.appendChild(locationP);
     let pElement = document.createElement('p');
-    pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission;
+    pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission.toLocaleString();
     divElement.appendChild(pElement);
     // Creating a button
     let buttonElement = document.createElement('button');
-    buttonElement.textContent = 'Open Modal';
+    buttonElement.classList.add('btn-primary');
+    buttonElement.textContent = 'Read more';
     buttonElement.onclick = function() {
       openModal(emissionDetails);
     };
@@ -269,14 +279,33 @@ function yourFunction(num) {
       map.on('moveend', () => {
           if (!markerSet.has(locations[locationIndex].coordinates)) {
               markerSet.add(locations[locationIndex].coordinates);
+              const newId = "popupContent"+locationIndex;
+              console.log('newId',newId);
               const marker = new mapboxgl.Marker(customMarker)
                   .setLngLat(locations[locationIndex].coordinates)
-                  .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
-                  .addTo(map)
-                  .getElement()
-                  .addEventListener('click', () => {
-                      // Each marker created should introduce itself when pressed for an answer.
+                  .setPopup(new mapboxgl.Popup().setHTML(`
+                  <div id="${newId}">
+                    <h3>Facility: ${jsonRef[locationIndex].facility_name}</h3>
+                    <button class="popupButton" data-index="${locationIndex}">Read more</button>
+                    </div>
+                  `))
+                  .addTo(map);
+
+                  marker.getPopup().on('open', () => {
+                    const popupContent = document.getElementById(newId);
+                    const popupButtons = popupContent.getElementsByClassName('popupButton');
+                    
+                    for (let i = 0; i < popupButtons.length; i++) {
+                      popupButtons[i].addEventListener('click', (event) => {
+                        const dataIndex = event.target.getAttribute('data-index');
+                        openModal(jsonRef[dataIndex]);
+                      });
+                    }
                   });
+
+                function modalIndex(num) {
+                  openModal(jsonRef[num]);
+                }
           }
       });
   }
@@ -290,7 +319,6 @@ function yourFunction(num) {
                 pushFollowers: false
             })
             .addTo(controller)
-            .addIndicators()
             .on("update", function(e) {
                 direction = (e.target.controller().info("scrollDirection"));
             })
