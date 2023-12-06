@@ -1,3 +1,36 @@
+  #loadingModal {
+    z-index: 9999;
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+
+  #coverLeft, #coverRight {
+    width: 50%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(240, 255, 255);
+  }
+  #coverRight {
+    right: 0;
+  }
+
+
+
+  #titleWaves {
+    position: fixed;
+    bottom: 0;
+  }
+
+  #modalBody {
+    width: 100% !important;
+  }
+  
   p, h1, h2, h4 {
     color: whitesmoke;
   }
@@ -15,6 +48,10 @@
   }
   img {
     max-width: 100% !important;
+  }
+  #introSlide {
+    margin: 1.4rem;
+    color: rgb(27, 27, 27);
   }
 
   .navbar-dark, button, .btn, .btn-primary {
@@ -186,7 +223,16 @@
     background-color: yellow;
 }
 
+#introSlide {
+  font-size: 2em;
+}
 
+#coverLeft {
+  width: 100%;
+}
+#coverRight {
+  display: none;
+}
 
 
 }

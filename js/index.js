@@ -1,8 +1,31 @@
 $(document).ready(function() {
   var jsonRef;
-    var myLoadingModal = document.getElementById('loadingModal');
-    var loadingModal = new bootstrap.Modal(myLoadingModal);
-    loadingModal.show();
+  let index = 0;
+  fadeMessages(index);
+
+  const slideshowInterval = setInterval(function() {
+    index = (index + 1) % messages.length;
+    fadeMessages(index);
+
+    // Check if the slideshow is over
+    if (index === messages.length - 2 ) {
+      $('#coverRight').fadeOut(3000);
+
+    }
+    else if (index === messages.length - 1) {
+      clearInterval(slideshowInterval); // Stop the slideshow interval
+
+      // Perform an action when the slideshow is finished
+      // For example, displaying an alert:
+
+      $('#loadingModal').fadeOut();
+
+      
+      // You can replace the alert with any other action you want to perform
+    }
+  }, 3000); 
+    
+
     const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
 
 
@@ -55,9 +78,6 @@ $(document).ready(function() {
       zoom: 9 // starting zoom
   });
 
-  function logI() {
-    console.log(111);
-  }
 
 
   async function openModal(emissionDetails) {
@@ -152,7 +172,6 @@ $(document).ready(function() {
 
   var parentDiv = document.getElementById('bodyText');
   var locations = [];
-  const markerSet = new Set();
   var locationIndex = 0;
   var controller = new ScrollMagic.Controller({
     globalSceneOptions: {
@@ -166,7 +185,7 @@ $(document).ready(function() {
   getTop15Results()
       .then(async data => {
         jsonRef = data;
-        loadingModal.hide();
+        // $('#loadingModal').hide();
           const pageRendered = await renderPage(data);
         //   TODO
         if (pageRendered) {

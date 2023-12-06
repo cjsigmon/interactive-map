@@ -1,6 +1,15 @@
 // tribal_land_id/>/0
 var textIsFullScrn = false;
 var mapIsFullScrn = false;
+
+const messages = [
+  "The United States Environmental Protection Agency established an online greenhouse gas reporting program in response the 2008 Consolidated Appropriations Act.",
+  "Facilities that produce at least 25,000 metric tons of CO2E are required to submit reports.",
+  "All greenhouse gases emitted are reported in reference to CO2E, the equivalent amount of that gas in carbon-dioxide, to measure its environmental effects.",
+  "This interactive page focuses only on reports of directly emitted CO2, not on other greenhouse gases, nor on indirect greenhouse gas equivalents from facility products like gasoline which will be used later.",
+  "  ",
+  "  "
+]
 // Check if the current device is a mobile device based on screen width
 const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
 
@@ -123,6 +132,12 @@ async function fetchData(startRow, endRow) {
       console.error('Error:', error);
       return summary;
     }
+  }
+
+  function fadeMessages(index) {
+    $('#introSlide').fadeOut(500, function() {
+      $(this).text(messages[index]).fadeIn(500);
+    });
   }
 
   
