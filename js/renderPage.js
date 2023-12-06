@@ -80,3 +80,26 @@ async function fetchData(startRow, endRow) {
     }
     mapIsFullScrn = !mapIsFullScrn;
   }
+  async function getWikiDesc(query) {
+    const customSearchEngineId = '8315f366d46b940eb';
+    const googleApiKey = 'AIzaSyBRiLHAFGHj2prk1e84nCtebLDqN32mgog';
+    let summary = 'no wiki results found';
+  
+    try {
+      const googleDescSrch = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&cx=${customSearchEngineId}&key=${googleApiKey}`;
+      const response = await fetch(googleDescSrch);
+      const searchData = await response.json();
+      const topSearchResultLink = searchData.items[0].link;
+      const topic = topSearchResultLink.substring(topSearchResultLink.lastIndexOf('/') + 1);
+      const wikipediaAPI = `https://en.wikipedia.org/api/rest_v1/page/summary/${topic}`;
+      const wikiResponse = await fetch(wikipediaAPI);
+      const wikiData = await wikiResponse.json();
+      summary = wikiData.extract;
+      return summary;
+    } catch (error) {
+      console.error('Error:', error);
+      return summary;
+    }
+  }
+
+  

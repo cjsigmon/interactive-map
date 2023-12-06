@@ -60,7 +60,7 @@ $(document).ready(function() {
   }
 
 
-function openModal(emissionDetails) {
+  async function openModal(emissionDetails) {
     $('#moreInfoLabel').text(emissionDetails.facility_name);
   
     const GOOGLE_KEY = 'AIzaSyBRiLHAFGHj2prk1e84nCtebLDqN32mgog';
@@ -68,8 +68,9 @@ function openModal(emissionDetails) {
     const facilityName = encodeURIComponent(emissionDetails.facility_name);
     const locationDetails = encodeURIComponent(emissionDetails.address1);
     const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${facilityName}+power+plant&cx=${searchEngineId}&key=${GOOGLE_KEY}&searchType=image`;
-
-  
+    const wikiQuery = emissionDetails.facility_name + " " + sectors[emissionDetails.sector_id];
+    wikiResult = await getWikiDesc(wikiQuery);
+    console.log('NEW wikiResult', wikiResult);
   
     $.ajax({
       url: apiUrl,
@@ -98,6 +99,13 @@ function openModal(emissionDetails) {
             </div>
           </div>
           <hr>
+          <div class='row'>
+            <div class='col-md-7'>
+              <p>${wikiResult}</p>
+            </div>
+            <div class='col-md-5'></div>
+          </div>
+
 
           `);
   
