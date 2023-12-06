@@ -244,7 +244,7 @@ $(document).ready(function() {
   function offsetCoords(coordinates) {
       let coordsCopy = [...coordinates];
       if (isMobileDevice) {
-        coordsCopy[1] += 0.3; // Adjust the longitude value to offset the center to the left
+        coordsCopy[1] += 0.25; // Adjust the longitude value to offset the center to the left
 
       } else {
         coordsCopy[0] += 0.4; // Adjust the longitude value to offset the center to the left
