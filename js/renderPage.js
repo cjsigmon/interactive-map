@@ -1,6 +1,16 @@
 // tribal_land_id/>/0
 var textIsFullScrn = false;
 var mapIsFullScrn = false;
+// Check if the current device is a mobile device based on screen width
+const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
+
+// Example usage:
+if (isMobileDevice) {
+  console.log('This is a mobile device.');
+} else {
+  console.log('This is not a mobile device.');
+}
+
 // Function to fetch data from the API endpoint
 async function fetchData(startRow, endRow) {
     try {
@@ -59,14 +69,22 @@ async function fetchData(startRow, endRow) {
 
   function fullscreenText() {
     if (!textIsFullScrn) {
+
       $('#fullscreenMap').css('visibility', 'hidden');
       $('#map').css('visibility', 'hidden');
       $('#bodyText').removeClass('col-md-6').addClass('col-md-12');
+      if (isMobileDevice) {
+        $('#bodyText').css('min-height', '100vh');
+        $('#bodyText').css('max-height', '100vh');
+      }
     } else {
       $('#fullscreenMap').css('visibility', 'visible');
       $('#map').css('visibility', 'visible');
-
       $('#bodyText').removeClass('col-md-12').addClass('col-md-6');
+      if (isMobileDevice) {
+        $('#bodyText').css('min-height', '50vh');
+        $('#bodyText').css('max-height', '50vh');
+      }
 
     }
     textIsFullScrn = !textIsFullScrn;
@@ -76,11 +94,11 @@ async function fetchData(startRow, endRow) {
     if (!mapIsFullScrn) {
       $('#fullscreenText').hide();
       $('#subTwo').hide();
-      $('#bodyText').removeClass('col-md-6').addClass('col-md-0');
+      $('#bodyText').removeClass('col-md-6').addClass('col-0');
     } else {
       $('#fullscreenText').show();
       $('#subTwo').show();
-      $('#bodyText').removeClass('col-md-0').addClass('col-md-6');
+      $('#bodyText').removeClass('col-0').addClass('col-md-6');
 
     }
     mapIsFullScrn = !mapIsFullScrn;

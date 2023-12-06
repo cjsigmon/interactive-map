@@ -3,7 +3,7 @@ $(document).ready(function() {
     var myLoadingModal = document.getElementById('loadingModal');
     var loadingModal = new bootstrap.Modal(myLoadingModal);
     loadingModal.show();
-
+    const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
 
 
 
@@ -170,7 +170,7 @@ $(document).ready(function() {
           const pageRendered = await renderPage(data);
         //   TODO
         if (pageRendered) {
-            var centerOffset = offsetLeft(locations[locationIndex].coordinates);
+            var centerOffset = offsetCoords(locations[locationIndex].coordinates);
             map.setCenter(centerOffset);
         }
       })
@@ -241,9 +241,15 @@ $(document).ready(function() {
     prepareTrigger(sectionElement);
   }
   
-  function offsetLeft(coordinates) {
+  function offsetCoords(coordinates) {
       let coordsCopy = [...coordinates];
-      coordsCopy[0] += 0.4; // Adjust the longitude value to offset the center to the left
+      if (isMobileDevice) {
+        coordsCopy[1] += 0.2; // Adjust the longitude value to offset the center to the left
+
+      } else {
+        coordsCopy[0] += 0.4; // Adjust the longitude value to offset the center to the left
+
+      }
       // Later, make this a variable to adjust by screen size
       return coordsCopy;
   }
@@ -258,7 +264,7 @@ $(document).ready(function() {
               locationIndex--;
           }
       }
-      let cameraOffset = offsetLeft(locations[locationIndex].coordinates);
+      let cameraOffset = offsetCoords(locations[locationIndex].coordinates);
       map.flyTo({
           center: cameraOffset,
           zoom: 9,
