@@ -1,4 +1,4 @@
-  p, h1, h2, h3 {
+  p, h1, h2 {
     color: whitesmoke;
   }
   .popup, .modalText, #modalTitle, #modalBody > .row > div > p {
@@ -91,6 +91,17 @@
   .custom-marker {
     background-size: cover;
     /* Add any additional styles for your custom marker */
+  }
+
+  .popup {
+    /* display: none; */
+    position: absolute;
+    top: 200px;
+    bottom: auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 9999;
   }
   
 

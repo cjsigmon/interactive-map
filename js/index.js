@@ -1,4 +1,6 @@
+var uniIndex = 0;
 $(document).ready(function() {
+  var jsonRef;
     var myLoadingModal = document.getElementById('loadingModal');
     var loadingModal = new bootstrap.Modal(myLoadingModal);
     loadingModal.show();
@@ -28,6 +30,10 @@ $(document).ready(function() {
       center: [5, 5], // starting position [lng, lat]
       zoom: 7 // starting zoom
   });
+
+  function logI() {
+    console.log(111);
+  }
 
 
 function openModal(emissionDetails) {
@@ -137,6 +143,7 @@ function openModal(emissionDetails) {
 
   getTop15Results()
       .then(async data => {
+        jsonRef = data;
         loadingModal.hide();
           const pageRendered = await renderPage(data);
         //   TODO
@@ -163,15 +170,35 @@ function openModal(emissionDetails) {
                 markerSet.add(locations[locationIndex].coordinates);
                 var centerOffset = offsetLeft(locations[locationIndex].coordinates);
                 map.setCenter(centerOffset);
+
+                console.log('jsonRef[i]', jsonRef[i]);
+
+
       
-                const firstMarker = new mapboxgl.Marker(customMarker)
-                    .setLngLat(locations[locationIndex].coordinates)
-                    .setPopup(new mapboxgl.Popup().setHTML(`<p class="popup">${locations[locationIndex].name}</p>`))
-                    .addTo(map)
-                    .getElement()
-                    .addEventListener('click', () => {
-                        // Your click event logic goes here
-                    });      
+// Create a Mapbox marker with a popup containing HTML content
+const firstMarker = new mapboxgl.Marker(customMarker)
+  .setLngLat(locations[locationIndex].coordinates)
+  .setPopup(new mapboxgl.Popup().setHTML('<div id="popupContent"><button id="popupButton">Click me</button></div>'))
+  .addTo(map);
+
+// Add an event listener to the map for the 'open' event of the popup
+firstMarker.getPopup().on('open', () => {
+  // Get the DOM element of the popup content
+  const popupContent = document.getElementById('popupContent');
+
+  // Add a click event listener to the button inside the popup content
+  const popupButton = document.getElementById('popupButton');
+  popupButton.addEventListener('click', () => {
+    // Call a function or perform an action when the button is clicked
+    yourFunction(5); // Replace 'yourFunction' with the function you want to call
+  });
+});
+
+function yourFunction(num) {
+  openModal(jsonRef[num]);
+}
+
+
             }
         } catch {
               // Skipping this one, it does not have a listed address
