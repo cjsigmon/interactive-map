@@ -27,7 +27,8 @@
     background: linear-gradient(to right, rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.65),rgba(0, 0, 0, 0.80),rgba(0, 0, 0, 0.87),rgba(0, 0, 0, 0.90), rgba(0, 0, 0, 0.9),rgba(0, 0, 0, 0.9),rgba(0, 0, 0, 0.91),rgba(0, 0, 0, 0.9),rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.693));
     padding-left: 6rem;
     padding-right: 3rem;
-    box-shadow: 0px 0px 70px rgb(0, 0, 0);
+    box-shadow: 0px 0px 30px rgb(0, 156, 104);
+    min-height: 100vh;
 
   }
   #farZ{
@@ -69,7 +70,7 @@
     margin-bottom: 50%;
   }
   .wonder > h2 {
-    padding-top: 3.5rem;
+    padding-top: 4rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
   .wonder > p {
@@ -118,8 +119,20 @@
     background-image: url('../img/factoryArt.png');
     height: 40px;
     width: 40px;
-    box-shadow: 0px 0px 30px rgb(0, 156, 104);
+    animation: pulse 5s infinite ease-in-out;
     /* Add any additional styles for your custom marker */
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0px 0px 20px rgb(0, 212, 141);    
+    }
+    50% {
+      box-shadow: 0px 0px 40px rgb(0, 212, 141);    
+    }
+    100% {
+      box-shadow: 0px 0px 20px rgb(0, 212, 141);    
+    }
   }
 
   .popup {

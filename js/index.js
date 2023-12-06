@@ -5,7 +5,6 @@ $(document).ready(function() {
     loadingModal.show();
 
 
-    const customMarker = document.getElementById('customMarker');
 
 
     const sectors = ["no_id","no_id","Waste","Powerplants","Refineries",
@@ -53,7 +52,7 @@ $(document).ready(function() {
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/dark-v10', // Use the 'dark' style
       center: [5, 5], // starting position [lng, lat]
-      zoom: 7 // starting zoom
+      zoom: 9 // starting zoom
   });
 
   function logI() {
@@ -163,11 +162,8 @@ function openModal(emissionDetails) {
           const pageRendered = await renderPage(data);
         //   TODO
         if (pageRendered) {
-            markerSet.add(locations[locationIndex].coordinates);
             var centerOffset = offsetLeft(locations[locationIndex].coordinates);
             map.setCenter(centerOffset);
-  
- 
         }
       })
       .catch(error => console.error('Error fetching JSON:', error));
@@ -175,37 +171,14 @@ function openModal(emissionDetails) {
   async function renderPage(facilityList) {
       for (let i = 0; i < facilityList.length; i++) {
         try {
-
             locations.push({
                 coordinates: [facilityList[i].longitude, facilityList[i].latitude],
                 name: facilityList[i].facility_name
             });
             addSection(facilityList[i], i);
-            if (i==0) {
-                markerSet.add(locations[locationIndex].coordinates);
-                var centerOffset = offsetLeft(locations[locationIndex].coordinates);
-                map.setCenter(centerOffset);
-                // Create a Mapbox marker with a popup containing HTML content
-                const firstMarker = new mapboxgl.Marker(customMarker)
-                  .setLngLat(locations[locationIndex].coordinates)
-                  .setPopup(new mapboxgl.Popup().setHTML(`
-                  <div id="popupContent">
-                    <h3>Facility: ${jsonRef[i].facility_name}</h3>
-                    <button class="btn btn-secondary" id="popupButton">Read more</button>
-                  </div>
-                  `))
-                  .addTo(map);
-                firstMarker.getPopup().on('open', () => {
-                  const popupContent = document.getElementById('popupContent');
-                  const popupButton = document.getElementById('popupButton');
-                  popupButton.addEventListener('click', () => {
-                    modalIndex(i);
-                  });
-                });
-                function modalIndex(num) {
-                  openModal(jsonRef[num]);
-                }
-            }
+            addMarker(i);
+
+
         } catch {
               return false;
           }
@@ -236,7 +209,8 @@ function openModal(emissionDetails) {
     locationP.innerHTML = "Location: "+emissionDetails.city + ", "+emissionDetails.state_name;
     divElement.appendChild(locationP);
     let pElement = document.createElement('p');
-    pElement.innerHTML = "CO2E Emissions: "+emissionDetails.co2e_emission.toLocaleString() + " metric tons";
+    let co2eText = "Reported CO<sub>2</sub> emissions: " + emissionDetails.co2e_emission.toLocaleString() + " metric tons";
+    pElement.innerHTML = co2eText;
     divElement.appendChild(pElement);
     // Creating a button
     let buttonElement = document.createElement('button');
@@ -261,7 +235,7 @@ function openModal(emissionDetails) {
   
   function offsetLeft(coordinates) {
       let coordsCopy = [...coordinates];
-      coordsCopy[0] += 1.8; // Adjust the longitude value to offset the center to the left
+      coordsCopy[0] += 0.4; // Adjust the longitude value to offset the center to the left
       // Later, make this a variable to adjust by screen size
       return coordsCopy;
   }
@@ -279,7 +253,7 @@ function openModal(emissionDetails) {
       let cameraOffset = offsetLeft(locations[locationIndex].coordinates);
       map.flyTo({
           center: cameraOffset,
-          zoom: 7,
+          zoom: 9,
           speed: 1,
           curve: 1.7,
           easing(t) {
@@ -287,39 +261,40 @@ function openModal(emissionDetails) {
           }
       });
 
-      map.on('moveend', () => {
-          if (!markerSet.has(locations[locationIndex].coordinates)) {
-              markerSet.add(locations[locationIndex].coordinates);
-              const newId = "popupContent"+locationIndex;
-              console.log('newId',newId);
-              const marker = new mapboxgl.Marker(customMarker)
-                  .setLngLat(locations[locationIndex].coordinates)
-                  .setPopup(new mapboxgl.Popup().setHTML(`
-                  <div id="${newId}">
-                    <h3>Facility: ${jsonRef[locationIndex].facility_name}</h3>
-                    <button class="btn btn-secondary popupButton" data-index="${locationIndex}">Read more</button>
-                    </div>
-                  `))
-                  .addTo(map);
+  }
 
-                  marker.getPopup().on('open', () => {
-                    const popupContent = document.getElementById(newId);
-                    const popupButtons = popupContent.getElementsByClassName('popupButton');
-                    console.log('opened div len', popupButtons.length)
-                    for (let i = 0; i < popupButtons.length; i++) {
-                      popupButtons[i].addEventListener('click', (event) => {
-                        console.log('YOU CLICKED')
-                        const dataIndex = event.target.getAttribute('data-index');
-                        openModal(jsonRef[dataIndex]);
-                      });
-                    }
+  function addMarker(locationIndex) {
+      const newId = "popupContent"+locationIndex;
+          console.log('newId',newId);
+          let customMarker = document.createElement('div');
+          customMarker.classList.add('custom-marker');
+
+
+
+          const marker = new mapboxgl.Marker(customMarker)
+              .setLngLat(locations[locationIndex].coordinates)
+              .setPopup(new mapboxgl.Popup().setHTML(`
+              <div id="${newId}">
+                <h3>Facility: ${jsonRef[locationIndex].facility_name}</h3>
+                <button class="btn btn-secondary popupButton" data-index="${locationIndex}">Read more</button>
+                </div>
+              `))
+              .addTo(map);
+
+              console.log(marker);
+
+              marker.getPopup().on('open', () => {
+                const popupContent = document.getElementById(newId);
+                const popupButtons = popupContent.getElementsByClassName('popupButton');
+                console.log('opened div len', popupButtons.length)
+                for (let i = 0; i < popupButtons.length; i++) {
+                  popupButtons[i].addEventListener('click', (event) => {
+                    console.log('YOU CLICKED')
+                    const dataIndex = event.target.getAttribute('data-index');
+                    openModal(jsonRef[dataIndex]);
                   });
-
-                function modalIndex(num) {
-                  openModal(jsonRef[num]);
                 }
-          }
-      });
+              });          
   }
 
   function prepareTrigger(trigger) {
