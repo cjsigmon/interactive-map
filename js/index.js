@@ -210,14 +210,14 @@ $(document).ready(function() {
     if (thisSector.endsWith('s')) {
       thisSector = thisSector.slice(0, -1);
     }
-    h2Element.textContent = emissionDetails.facility_name + " " + thisSector;
+    h2Element.textContent = (i+1)+") "+ emissionDetails.facility_name + " " + thisSector;
     divElement.appendChild(h2Element);
     let locationP = document.createElement('p');
 
     locationP.innerHTML = "Location: "+emissionDetails.city + ", "+emissionDetails.state_name;
     divElement.appendChild(locationP);
     let pElement = document.createElement('p');
-    let co2eText = "Reported CO<sub>2</sub> emissions: " + emissionDetails.co2e_emission.toLocaleString() + " metric tons";
+    let co2eText = "Reported CO<sub id'subTwo'>2</sub> emissions: " + emissionDetails.co2e_emission.toLocaleString() + " metric tons";
     pElement.innerHTML = co2eText;
     divElement.appendChild(pElement);
     // Creating a button
@@ -276,9 +276,20 @@ $(document).ready(function() {
           console.log('newId',newId);
           let customMarker = document.createElement('div');
           customMarker.classList.add('custom-marker');
+          // Create an h1 element
+          let h4 = document.createElement('h4');
+          let markNum = locationIndex+1;
+          let markAbove = `#${markNum}`;
+          h4.textContent = markAbove; // Set the text content of the h1
 
+          // Style the h1 element (position it above the custom marker div)
+          h4.style.position = 'absolute';
+          h4.style.top = '-30px'; // Adjust the top position as needed to place it above the div
+          h4.style.left = '50%'; // Adjust the left position if necessary
+          h4.style.transform = 'translateX(-50%)'; // Center the h1 horizontally above the div
 
-
+          // Append the h1 element to the custom marker div
+          customMarker.appendChild(h4);
           const marker = new mapboxgl.Marker(customMarker)
               .setLngLat(locations[locationIndex].coordinates)
               .setPopup(new mapboxgl.Popup().setHTML(`

@@ -72,9 +72,11 @@ async function fetchData(startRow, endRow) {
   function fullscreenMap() {
     if (!mapIsFullScrn) {
       $('#fullscreenText').hide();
+      $('#subTwo').hide();
       $('#bodyText').removeClass('col-md-6').addClass('col-md-0');
     } else {
       $('#fullscreenText').show();
+      $('#subTwo').show();
       $('#bodyText').removeClass('col-md-0').addClass('col-md-6');
 
     }
