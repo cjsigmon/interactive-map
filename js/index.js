@@ -1,7 +1,10 @@
 $(document).ready(function() {
   var jsonRef;
   let index = 0;
+  
   fadeMessages(index);
+
+  
 
   const slideshowInterval = setInterval(function() {
     index = (index + 1) % messages.length;

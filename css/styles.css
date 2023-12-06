@@ -237,6 +237,19 @@
 
 }
 
+#titleWaves path {
+  animation: wave 10s infinite alternate ease-in-out;
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-5px); /* Adjust the horizontal translation for the wave effect */
+  }
+}
+
 
 
 
