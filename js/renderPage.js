@@ -60,9 +60,12 @@ async function fetchData(startRow, endRow) {
   function fullscreenText() {
     if (!textIsFullScrn) {
       $('#fullscreenMap').css('visibility', 'hidden');
+      $('#map').css('visibility', 'hidden');
       $('#bodyText').removeClass('col-md-6').addClass('col-md-12');
     } else {
       $('#fullscreenMap').css('visibility', 'visible');
+      $('#map').css('visibility', 'visible');
+
       $('#bodyText').removeClass('col-md-12').addClass('col-md-6');
 
     }
