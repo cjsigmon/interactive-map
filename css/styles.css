@@ -155,6 +155,11 @@
     z-index: 9999;
   }
 
+  .mapboxgl-popup-anchor-bottom, .mapboxgl-popup-anchor-bottom-left, .mapboxgl-popup-anchor-bottom-right {
+    padding-bottom: 15px;
+}
+
+
   /* Media query for mobile devices */
 @media (max-width: 767px) {
   #bodyText {
@@ -180,6 +185,9 @@
     margin-top: 3.5rem;
     background-color: yellow;
 }
+
+
+
 
 }
 
