@@ -35,6 +35,10 @@
             <div class="dropdown-menu" id="dropMenu" aria-labelledby="dropdown01">
             </div>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="modal" data-target="#aboutModal"> Intro to this data
+            </a>
+          </li>
         </ul>
 
       </div>
@@ -83,6 +87,28 @@
                 </div>
                 <div id="modalBody">
                   <p class="modalText">Modal content goes here...</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modalTitle" id="aboutModalLabel">About this data</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div id="modalBody">
+                  <h5 class="modalText">The United States Environmental Protection Agency established an online greenhouse gas reporting program in response the 2008 Consolidated Appropriations Act.</h5>
+                  <h5 class="modalText">Facilities that produce at least 25,000 metric tons of CO2E are required to submit reports.</h5>
+                  <h5 class="modalText">All greenhouse gases emitted are reported in reference to CO2E, the equivalent amount of that gas in carbon-dioxide, to measure its environmental effects.</h5>
+                  <h5 class="modalText">This interactive page focuses only on reports of directly emitted CO2, not on other greenhouse gases, nor on indirect greenhouse gas equivalents from facility products like gasoline which will be used later.</h5>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

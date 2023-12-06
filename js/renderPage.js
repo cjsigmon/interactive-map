@@ -140,4 +140,11 @@ async function fetchData(startRow, endRow) {
     });
   }
 
+  function openDescription() {
+    var myAboutModal = document.getElementById('aboutModal');
+    // Create a Bootstrap modal instance
+    var aboutModal = new bootstrap.Modal(myModal);
+    aboutModal.show();
+  }
+
   

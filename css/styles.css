@@ -10,6 +10,14 @@
     max-height: none !important;
   }
 
+  #aboutModal {
+    z-index: 1054;
+  }
+
+  .nav-link {
+    cursor: pointer  !important;
+  }
+
   #coverLeft, #coverRight {
     width: 50%;
     height: 100%;

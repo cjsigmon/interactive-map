@@ -21,7 +21,7 @@ $(document).ready(function() {
       // Perform an action when the slideshow is finished
       // For example, displaying an alert:
 
-      $('#loadingModal').fadeOut();
+      $('#loadingModal').fadeOut(1000);
 
       
       // You can replace the alert with any other action you want to perform
